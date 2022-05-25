@@ -1,0 +1,10 @@
+{
+  "simulation": "com.example.webtours.Stability",
+  "simulationId": "stability",
+  "start": 1653474767343,
+  "description": "",
+  "scenarios": ["Common Scenario"],
+  "assertions": [
+
+  ]
+}
