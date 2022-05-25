@@ -9,7 +9,7 @@ class Debug extends Simulation {
   // proxy is required on localhost:8888
 
   setUp(
-    CommonScenario().inject(atOnceUsers(2))
+    CommonScenario().inject(atOnceUsers(1))
   ).protocols(httpProtocol)
     .maxDuration(testDuration)
 

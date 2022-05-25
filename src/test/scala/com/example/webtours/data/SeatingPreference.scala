@@ -1,4 +1,4 @@
-package com.example.webtours.utils.data
+package com.example.webtours.data
 
 object SeatingPreference extends Enumeration {
   type SeatingPreference = Value

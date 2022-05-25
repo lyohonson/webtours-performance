@@ -4,6 +4,10 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
+
 object Webtours {
 
   val openMainPage: HttpRequestBuilder = http("GET /webtours")
@@ -16,7 +20,10 @@ object Webtours {
 
   val postLogin: HttpRequestBuilder = http("POST /login.pl")
     .post("/cgi-bin/login.pl")
-    .formParamSeq(Seq(("username", "ashugaev1"), ("password", "Qwerty123")))
+    .formParamSeq(Seq(("username", "ashugaev1"),
+      ("password", "Qwerty123"),
+      ("userSession", "133937.#{sessionStringId}"),
+      ("JSFormSubmit", "off")))
     .check(status is 200)
 
   val getNavHome: HttpRequestBuilder = http("GET /nav.pl")
@@ -59,11 +66,11 @@ object Webtours {
 
   val postReservationsSeat: HttpRequestBuilder = http("POST /reservations.pl-seat")
     .get("/cgi-bin/reservations.pl")
-    .formParamSeq(Seq(("outboundFlight", "102;529;#{departDate}"),
+    .formParamSeq(Seq(("outboundFlight", "#{departNumber}#{arriveNumber}#{flightNumber};529;#{departDate}"),
       ("numPassengers", 1),
       ("advanceDiscount", 0),
       ("seatType", "#{seatType}"),
-      ("seatPref", "#{seatType}")
+      ("seatPref", "#{seatPref}")
     ))
     .check(status is 200)
 
@@ -79,11 +86,16 @@ object Webtours {
       ("numPassengers", 1),
       ("seatType", "#{seatType}"),
       ("seatPref", "#{seatPref}"),
-      ("outboundFlight", s"102;529;#{departDate}"),
+      ("outboundFlight", "#{departNumber}#{arriveNumber}#{flightNumber};529;#{departDate}"),
       ("advanceDiscount", 0),
-      ("JSFormSubmit", "on"),
+      ("JSFormSubmit", "off"),
     ))
     .check(status is 200)
 
-
+  def getDate(plusDays: Int): String = {
+    val format = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    val dt = new Date()
+    val date = LocalDate.parse(dt.toInstant.toString.replaceAll("T.*", "")).plusDays(plusDays)
+    date.format(format)
+  }
 }
